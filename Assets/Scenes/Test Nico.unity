@@ -8082,6 +8082,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Pick up
       objectReference: {fileID: 0}
+    - target: {fileID: 4941920978842826295, guid: 95804f0f1764e8c4aa58f8f507b2dc96, type: 3}
+      propertyPath: m_TagString
+      value: PickUp
+      objectReference: {fileID: 0}
     - target: {fileID: 7538193516710427436, guid: 95804f0f1764e8c4aa58f8f507b2dc96, type: 3}
       propertyPath: m_IsTrigger
       value: 1
