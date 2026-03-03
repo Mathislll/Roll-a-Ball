@@ -5035,7 +5035,7 @@ Transform:
   m_Children:
   - {fileID: 7939349029722027074}
   - {fileID: 6940047197837105524}
-  - {fileID: 2006659272225261454}
+  - {fileID: 7966619378261393293}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!95 &5947595838510258835
@@ -5129,7 +5129,7 @@ MonoBehaviour:
   gravityMultiplier: 6
   jumpForce: 23
   jumpDelay: 0.15
-  groundCheck: {fileID: 2006659272225261454}
+  groundCheck: {fileID: 7966619378261393293}
   groundDistance: 0.4
   groundMask:
     serializedVersion: 2
@@ -5179,7 +5179,7 @@ MonoBehaviour:
   count: 0
   countText: {fileID: 0}
   winTextObject: {fileID: 0}
-  scoreToWin: 15
+  scoreToWin: 41
 --- !u!1 &5412532500633924589
 GameObject:
   m_ObjectHideFlags: 0
@@ -5652,7 +5652,7 @@ MonoBehaviour:
   rootTransform: {fileID: 7252760171300083416}
   radius: 0.5
   airRotationSpeed: 80
---- !u!1 &9010318490009861627
+--- !u!1 &8292146417219104923
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -5660,24 +5660,24 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 2006659272225261454}
+  - component: {fileID: 7966619378261393293}
   m_Layer: 0
-  m_Name: 
+  m_Name: Ground Check
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
---- !u!4 &2006659272225261454
+  m_IsActive: 1
+--- !u!4 &7966619378261393293
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 9010318490009861627}
+  m_GameObject: {fileID: 8292146417219104923}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -0.263, z: 0}
+  m_LocalPosition: {x: -0.13, y: -0.35, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
