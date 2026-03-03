@@ -32,11 +32,14 @@ public class PlayerController : MonoBehaviour
     public LayerMask groundMask;
     private bool isGrounded;
 
+    private PlayerScore playerScore;
+
     void Start()
     {
         rb = GetComponent<Rigidbody>();
         anim = GetComponent<Animator>();
         rb.linearDamping = 0f;
+        playerScore = GetComponent<PlayerScore>();
     }
 
     void OnMove(InputValue movementValue)
@@ -93,6 +96,16 @@ public class PlayerController : MonoBehaviour
         if (!isGrounded)
         {
             rb.linearVelocity += Vector3.up * Physics.gravity.y * (gravityMultiplier - 1f) * Time.fixedDeltaTime;
+        }
+    }
+
+    void OnTriggerEnter(Collider other)
+    {
+        if (other.gameObject.CompareTag("PickUp"))
+        {
+            other.gameObject.SetActive(false);
+            playerScore.count++;
+            playerScore.SetCountText();
         }
     }
 }
