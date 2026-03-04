@@ -51,9 +51,13 @@ public class PlayerController : MonoBehaviour
     public AudioClip deathSound;
     public AudioClip respawnSound;
 
+    [Header("Death Effects")]
+    public GameObject[] deathEffectObjects;
+
     private PlayerScore playerScore;
     private bool isKnockedBack;
     public MMF_Player damageFeedback;
+
     void Start()
     {
         rb = GetComponent<Rigidbody>();
@@ -216,6 +220,28 @@ public class PlayerController : MonoBehaviour
         }
 
         PlaySound(deathSound);
+
+        if (deathEffectObjects != null && deathEffectObjects.Length > 0)
+        {
+            int randomEffectIndex = Random.Range(0, deathEffectObjects.Length);
+            GameObject selectedEffect = deathEffectObjects[randomEffectIndex];
+
+            if (selectedEffect != null)
+            {
+                ParticleSystem ps = selectedEffect.GetComponent<ParticleSystem>();
+                if (ps != null)
+                {
+                    ps.Play();
+                }
+
+                AudioSource audio = selectedEffect.GetComponent<AudioSource>();
+                if (audio != null)
+                {
+                    audio.Play();
+                }
+            }
+        }
+
         StartCoroutine(RespawnRoutine());
     }
 

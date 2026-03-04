@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Collections;
 using UnityEngine.UI;
+using UnityEngine.InputSystem;
 
 namespace EpicToonFX
 {
@@ -46,14 +47,17 @@ namespace EpicToonFX
 
         void Update()
         {
-            if (Input.GetKeyDown(KeyCode.RightArrow) || Input.GetKeyDown(KeyCode.D))
+            if (Keyboard.current != null)
             {
-                NextEffect();
-            }
+                if (Keyboard.current.rightArrowKey.wasPressedThisFrame || Keyboard.current.dKey.wasPressedThisFrame)
+                {
+                    NextEffect();
+                }
 
-            if (Input.GetKeyDown(KeyCode.A) || Input.GetKeyDown(KeyCode.LeftArrow))
-            {
-                PreviousEffect();
+                if (Keyboard.current.aKey.wasPressedThisFrame || Keyboard.current.leftArrowKey.wasPressedThisFrame)
+                {
+                    PreviousEffect();
+                }
             }
         }
 
@@ -115,7 +119,6 @@ namespace EpicToonFX
 
         private IEnumerator EffectLoop()
         {
-            //Instantiating effect
             GameObject effect = Instantiate(effects[effectIndex], transform.position, Quaternion.identity);
             currentEffect = effect;
 
@@ -129,7 +132,6 @@ namespace EpicToonFX
                 effect.GetComponent<AudioSource>().enabled = false;
             }
 
-            //Update GUIText with effect name
             effectNameText.text = effects[effectIndex].name;
             effectIndexText.text = (effectIndex + 1) + " of " + effects.Length;
 
@@ -149,7 +151,6 @@ namespace EpicToonFX
                 }
                 else
                 {
-                    //Double delay for looping effects
                     if (particleSystem.main.loop)
                     {
                         yield return new WaitForSeconds(respawnDelay);
