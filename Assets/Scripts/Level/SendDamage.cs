@@ -7,8 +7,9 @@ public class SendDamage : MonoBehaviour
     public string targetTag = "Player";
 
     [Header("Options")]
-    public bool destroyOnImpact = false;
+    public bool instantKill = false;
     public bool continuousDamage = false;
+    
 
     void OnCollisionEnter(Collision collision)
     {
@@ -44,9 +45,9 @@ public class SendDamage : MonoBehaviour
             {
                 player.TakeDamage(damageAmount);
 
-                if (destroyOnImpact)
+                if (instantKill)
                 {
-                    Destroy(gameObject);
+                    player.Die();
                 }
             }
         }

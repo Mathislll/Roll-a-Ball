@@ -1,3 +1,4 @@
+using MoreMountains.Feedbacks;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -52,7 +53,7 @@ public class PlayerController : MonoBehaviour
 
     private PlayerScore playerScore;
     private bool isKnockedBack;
-
+    public MMF_Player damageFeedback;
     void Start()
     {
         rb = GetComponent<Rigidbody>();
@@ -181,6 +182,7 @@ public class PlayerController : MonoBehaviour
             {
                 int randomIndex = Random.Range(0, loseLifeSounds.Length);
                 PlaySound(loseLifeSounds[randomIndex]);
+                damageFeedback?.PlayFeedbacks();
             }
             StartCoroutine(InvincibilityRoutine());
         }
@@ -197,7 +199,7 @@ public class PlayerController : MonoBehaviour
         isInvincible = false;
     }
 
-    private void Die()
+    public void Die()
     {
         isDead = true;
         isKnockedBack = false;
