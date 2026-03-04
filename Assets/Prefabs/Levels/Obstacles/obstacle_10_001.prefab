@@ -14,15 +14,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 67442dca07bf5974c92537c96d6991da, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -0.113491885
+      value: -41.1368
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 67442dca07bf5974c92537c96d6991da, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -1.67
+      value: 0.009999871
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 67442dca07bf5974c92537c96d6991da, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 14.335738
+      value: -17.090984
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 67442dca07bf5974c92537c96d6991da, type: 3}
       propertyPath: m_LocalRotation.w
@@ -30,7 +30,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 67442dca07bf5974c92537c96d6991da, type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 67442dca07bf5974c92537c96d6991da, type: 3}
       propertyPath: m_LocalRotation.y
@@ -92,6 +92,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 67442dca07bf5974c92537c96d6991da, type: 3}
       insertIndex: -1
       addedObject: {fileID: 6117192149602517757}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 67442dca07bf5974c92537c96d6991da, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 4693866765530798770}
   m_SourcePrefab: {fileID: 100100000, guid: 67442dca07bf5974c92537c96d6991da, type: 3}
 --- !u!1 &4479033249020586603 stripped
 GameObject:
@@ -258,3 +261,20 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &4693866765530798770
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4479033249020586603}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 01ed3428286912f41abf6c98a83f8be4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SendDamage
+  isTrigger: 0
+  damageAmount: 1
+  targetTag: Player
+  destroyOnImpact: 0
+  continuousDamage: 0

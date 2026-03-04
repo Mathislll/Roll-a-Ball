@@ -5013,9 +5013,10 @@ GameObject:
   - component: {fileID: 3370362092460526236}
   - component: {fileID: 6301263262227316064}
   - component: {fileID: 3202297832775532113}
+  - component: {fileID: 5888218135001434655}
   m_Layer: 0
   m_Name: BlobPlayer
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -5120,6 +5121,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 130431ed9a4e5e442820f50f0f49d47f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerController
+  playerModel: {fileID: 517954888929746938}
   groundAcceleration: 60
   maxGroundSpeed: 15
   groundFriction: 0
@@ -5134,6 +5136,19 @@ MonoBehaviour:
   groundMask:
     serializedVersion: 2
     m_Bits: 8
+  maxLives: 3
+  respawnDelay: 1
+  invincibilityDuration: 1.5
+  audioSource: {fileID: 5888218135001434655}
+  loseLifeSounds:
+  - {fileID: 8300000, guid: 05885cbe3ef8a0241a0eebe5fd449328, type: 3}
+  - {fileID: 8300000, guid: 363ed43dcdc28c34eaea2bf071caf315, type: 3}
+  - {fileID: 8300000, guid: 906d8a1e77183a747aeef1c5e56457fe, type: 3}
+  - {fileID: 8300000, guid: dd07cde71e5afe347acdb290c63e70dc, type: 3}
+  - {fileID: 8300000, guid: fd29cdc554cf5b34980744159172fbbc, type: 3}
+  - {fileID: 8300000, guid: 6e0200b7a6da3344a9a057054242e4de, type: 3}
+  deathSound: {fileID: 8300000, guid: b36d3487d93636e4884f1c989e941d82, type: 3}
+  respawnSound: {fileID: 8300000, guid: 2e000d8d61f8aa743b50de2bef769336, type: 3}
 --- !u!114 &6301263262227316064
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5180,6 +5195,103 @@ MonoBehaviour:
   countText: {fileID: 0}
   winTextObject: {fileID: 0}
   scoreToWin: 41
+--- !u!82 &5888218135001434655
+AudioSource:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4889854599544690972}
+  m_Enabled: 1
+  serializedVersion: 4
+  OutputAudioMixerGroup: {fileID: 0}
+  m_audioClip: {fileID: 0}
+  m_Resource: {fileID: 0}
+  m_PlayOnAwake: 1
+  m_Volume: 1
+  m_Pitch: 1
+  Loop: 0
+  Mute: 0
+  Spatialize: 0
+  SpatializePostEffects: 0
+  Priority: 128
+  DopplerLevel: 1
+  MinDistance: 1
+  MaxDistance: 500
+  Pan2D: 0
+  rolloffMode: 0
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  reverbZoneMixCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
 --- !u!1 &5412532500633924589
 GameObject:
   m_ObjectHideFlags: 0
@@ -5296,7 +5408,7 @@ Transform:
   m_GameObject: {fileID: 5767861337723175951}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: 1, z: -0, w: 0}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 1.728, z: 0}
   m_LocalScale: {x: 0.1, y: 0.1, z: 0.1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -5361,7 +5473,7 @@ TrailRenderer:
       m_Curve:
       - serializedVersion: 3
         time: 0
-        value: 0.08391607
+        value: 0.037041068
         inSlope: 0
         outSlope: 0
         tangentMode: 0
