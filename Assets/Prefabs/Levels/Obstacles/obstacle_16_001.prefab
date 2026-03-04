@@ -5,6 +5,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
+    serializedVersion: 3
     m_TransformParent: {fileID: 7973397751567137302}
     m_Modifications:
     - target: {fileID: 5058035166398066921, guid: f719b46ae86b010408047fb3c85387d4, type: 3}
@@ -55,8 +56,26 @@ PrefabInstance:
       propertyPath: m_Name
       value: obstacle_16_002
       objectReference: {fileID: 0}
+    - target: {fileID: 5582792846935026259, guid: f719b46ae86b010408047fb3c85387d4, type: 3}
+      propertyPath: m_Layer
+      value: 3
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 5582792846935026259, guid: f719b46ae86b010408047fb3c85387d4, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 4166393528359528248}
+    - targetCorrespondingSourceObject: {fileID: 5582792846935026259, guid: f719b46ae86b010408047fb3c85387d4, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 7160929054627484146}
   m_SourcePrefab: {fileID: 100100000, guid: f719b46ae86b010408047fb3c85387d4, type: 3}
+--- !u!4 &5170651527682455574 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 5058035166398066921, guid: f719b46ae86b010408047fb3c85387d4, type: 3}
+  m_PrefabInstance: {fileID: 139637994549201151}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &5515230073179316908 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 5582792846935026259, guid: f719b46ae86b010408047fb3c85387d4, type: 3}
@@ -76,11 +95,24 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   rotationAxis: 1
   rotationSpeed: -200
+--- !u!114 &7160929054627484146
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5515230073179316908}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 540548234cb24cf49931bd3ea7c8b1d3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlatformAttach
 --- !u!1001 &7578866029853662717
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
+    serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: -8679921383154817045, guid: 8c57836fd1555bb458d0977902cc3225, type: 3}
@@ -89,15 +121,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 8c57836fd1555bb458d0977902cc3225, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -0
+      value: 49.094658
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 8c57836fd1555bb458d0977902cc3225, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: -1.19
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 8c57836fd1555bb458d0977902cc3225, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0
+      value: 0.065589614
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 8c57836fd1555bb458d0977902cc3225, type: 3}
       propertyPath: m_LocalRotation.w
@@ -131,7 +163,20 @@ PrefabInstance:
       propertyPath: m_Name
       value: obstacle_16_001
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 8c57836fd1555bb458d0977902cc3225, type: 3}
+      propertyPath: m_Layer
+      value: 3
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects:
+    - targetCorrespondingSourceObject: {fileID: -8679921383154817045, guid: 8c57836fd1555bb458d0977902cc3225, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 5170651527682455574}
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 8c57836fd1555bb458d0977902cc3225, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: -336407984038155604}
   m_SourcePrefab: {fileID: 100100000, guid: 8c57836fd1555bb458d0977902cc3225, type: 3}
 --- !u!1 &7344495428827537580 stripped
 GameObject:
@@ -146,9 +191,17 @@ MeshCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7344495428827537580}
   m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
   m_IsTrigger: 0
+  m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 4
+  serializedVersion: 5
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 3356720020137101510, guid: 8c57836fd1555bb458d0977902cc3225, type: 3}

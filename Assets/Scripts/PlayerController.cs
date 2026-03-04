@@ -20,10 +20,10 @@ public class PlayerController : MonoBehaviour
     public float airFriction = 1f;
 
     [Header("Custom gravity")]
-    public float gravityMultiplier = 5f; 
+    public float gravityMultiplier = 5f;
 
     [Header("Jump")]
-    public float jumpForce = 15f; 
+    public float jumpForce = 15f;
     public float jumpDelay = 0.15f;
 
     [Header("Ground detection")]
@@ -33,6 +33,7 @@ public class PlayerController : MonoBehaviour
     private bool isGrounded;
 
     private PlayerScore playerScore;
+    private bool isKnockedBack;
 
     void Start()
     {
@@ -74,6 +75,16 @@ public class PlayerController : MonoBehaviour
 
     private void FixedUpdate()
     {
+        if (isKnockedBack)
+        {
+            if (!isGrounded)
+            {
+                rb.linearVelocity += Vector3.up * Physics.gravity.y * (gravityMultiplier - 1f) * Time.fixedDeltaTime;
+            }
+
+            return;
+        }
+
         Vector3 movement = new Vector3(movementX, 0.0f, movementY);
         float currentAccel = isGrounded ? groundAcceleration : airAcceleration;
         float currentMaxSpeed = isGrounded ? maxGroundSpeed : maxAirSpeed;
@@ -97,6 +108,30 @@ public class PlayerController : MonoBehaviour
         {
             rb.linearVelocity += Vector3.up * Physics.gravity.y * (gravityMultiplier - 1f) * Time.fixedDeltaTime;
         }
+    }
+
+    public void ApplyKnockback(Vector3 direction, float force)
+    {
+        isKnockedBack = true;
+
+        rb.linearVelocity = Vector3.zero;
+
+        rb.angularVelocity = Vector3.zero;
+
+        rb.AddForce(direction * force, ForceMode.Impulse);
+        StartCoroutine(KnockbackRecovery());
+    }
+
+    private IEnumerator KnockbackRecovery()
+    {
+        yield return new WaitForSeconds(0.1f);
+
+        while (rb.linearVelocity.magnitude > maxGroundSpeed)
+        {
+            yield return new WaitForFixedUpdate();
+        }
+
+        isKnockedBack = false;
     }
 
     void OnTriggerEnter(Collider other)

@@ -2,22 +2,27 @@ using UnityEngine;
 
 namespace ithappy
 {
+    [RequireComponent(typeof(Rigidbody))]
     public class OscillateRotation : MonoBehaviour
     {
         public Vector3 rotationAxis = Vector3.up;
         public float rotationAngle = 45f;
         public float duration = 2f;
-        public bool useRandomDelay = false; // Toggle random delay
-        public float maxRandomDelay = 1f; // Maximum random delay
+        public bool useRandomDelay = false;
+        public float maxRandomDelay = 1f;
 
         private Quaternion startRotation;
         private float timeElapsed = 0f;
         private bool isReversing = false;
         private float randomDelay = 0f;
+        private Rigidbody rb;
 
         void Start()
         {
             startRotation = transform.rotation;
+            rb = GetComponent<Rigidbody>();
+
+            rb.isKinematic = true;
 
             if (useRandomDelay)
             {
@@ -25,11 +30,11 @@ namespace ithappy
             }
         }
 
-        void Update()
+        void FixedUpdate()
         {
             if (timeElapsed < randomDelay)
             {
-                timeElapsed += Time.deltaTime;
+                timeElapsed += Time.fixedDeltaTime;
                 return;
             }
 
@@ -41,9 +46,9 @@ namespace ithappy
             float currentAngle = rotationAngle * (isReversing ? (1 - progress) : progress);
             Quaternion currentRotation = startRotation * Quaternion.AngleAxis(currentAngle, rotationAxis);
 
-            transform.rotation = currentRotation;
+            rb.MoveRotation(currentRotation);
 
-            timeElapsed += Time.deltaTime;
+            timeElapsed += Time.fixedDeltaTime;
 
             if (timeElapsed >= duration / 2f + randomDelay)
             {

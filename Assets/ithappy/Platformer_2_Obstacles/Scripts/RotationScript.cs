@@ -14,9 +14,23 @@ namespace ithappy
         public RotationAxis rotationAxis = RotationAxis.Y;
         public float rotationSpeed = 50.0f;
 
-        void Update()
+        private Rigidbody rb;
+
+        void Start()
         {
-            float rotationValue = rotationSpeed * Time.deltaTime;
+            rb = GetComponent<Rigidbody>();
+
+            if (rb == null)
+            {
+                rb = gameObject.AddComponent<Rigidbody>();
+            }
+
+            rb.isKinematic = true;
+        }
+
+        void FixedUpdate()
+        {
+            float rotationValue = rotationSpeed * Time.fixedDeltaTime;
 
             Vector3 axis = Vector3.zero;
             switch (rotationAxis)
@@ -32,7 +46,8 @@ namespace ithappy
                     break;
             }
 
-            transform.Rotate(axis, rotationValue);
+            Quaternion deltaRotation = Quaternion.AngleAxis(rotationValue, axis);
+            rb.MoveRotation(rb.rotation * deltaRotation);
         }
     }
 }
