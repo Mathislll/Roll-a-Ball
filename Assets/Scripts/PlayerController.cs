@@ -38,7 +38,7 @@ public class PlayerController : MonoBehaviour
 
     [Header("Health System")]
     public int maxLives = 3;
-    private int currentLives;
+    public int currentLives;
     public float respawnDelay = 1f;
     public float invincibilityDuration = 1.5f;
     private bool isDead;
@@ -54,9 +54,20 @@ public class PlayerController : MonoBehaviour
     [Header("Death Effects")]
     public GameObject[] deathEffectObjects;
 
+    [Header("Hat Invincibility")]
+    public float hatInvincibilityDuration = 10f;
+    public MMF_Player hatInvincibilityFeedback;
+    public bool isHatInvincible;
+
     private PlayerScore playerScore;
     private bool isKnockedBack;
     public MMF_Player damageFeedback;
+    public event System.Action<int> OnHealthChanged;
+
+    void Awake()
+    {
+        currentLives = maxLives;
+    }
 
     void Start()
     {
@@ -65,7 +76,6 @@ public class PlayerController : MonoBehaviour
         rb.linearDamping = 0f;
         playerScore = GetComponent<PlayerScore>();
 
-        currentLives = maxLives;
         currentCheckpointPosition = transform.position;
 
         if (audioSource == null)
@@ -176,9 +186,10 @@ public class PlayerController : MonoBehaviour
 
     public void TakeDamage(int damageAmount)
     {
-        if (isDead || isInvincible) return;
+        if (isDead || isInvincible || isHatInvincible) return;
 
         currentLives = currentLives - damageAmount;
+        OnHealthChanged?.Invoke(currentLives);
 
         if (currentLives > 0)
         {
@@ -194,6 +205,25 @@ public class PlayerController : MonoBehaviour
         {
             Die();
         }
+    }
+
+    public void ActivateHatInvincibility()
+    {
+        StartCoroutine(HatInvincibilityRoutine());
+    }
+
+    private IEnumerator HatInvincibilityRoutine()
+    {
+        isHatInvincible = true;
+
+        if (hatInvincibilityFeedback != null)
+        {
+            hatInvincibilityFeedback.PlayFeedbacks();
+        }
+
+        yield return new WaitForSeconds(hatInvincibilityDuration);
+
+        isHatInvincible = false;
     }
 
     private IEnumerator InvincibilityRoutine()
@@ -261,6 +291,7 @@ public class PlayerController : MonoBehaviour
         }
 
         currentLives = maxLives;
+        OnHealthChanged?.Invoke(currentLives);
 
         PlaySound(respawnSound);
 
