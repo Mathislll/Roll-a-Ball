@@ -8,9 +8,18 @@ EditorBuildSettings:
   - enabled: 0
     path: Assets/Scenes/SampleScene.unity
     guid: 99c9720ab356a0642a771bea13969a05
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/MiniGame.unity
     guid: 8442ed8bc6b6af9499dc7cd7e0d0a121
+  - enabled: 1
+    path: Assets/Scenes/Level_01.unity
+    guid: d8d94eed0f431764d974e7c3d05d2dd5
+  - enabled: 1
+    path: Assets/Scenes/Level_02.unity
+    guid: 00aeab00af2068042a358eaf81b0cf6a
+  - enabled: 0
+    path: Assets/ithappy/Platformer_2_Obstacles/Scenes/Demonstration.unity
+    guid: e78b4201a1f9f034a9095a10cc9edda5
   m_configObjects:
     com.unity.input.settings: {fileID: 11400000, guid: 1dee2c3d0d1b25644a58e3246ee18046, type: 2}
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 052faaac586de48259a63d0c4782560b, type: 3}
