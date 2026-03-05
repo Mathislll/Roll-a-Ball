@@ -863,10 +863,6 @@ PrefabInstance:
       value: EndLevel
       objectReference: {fileID: 0}
     - target: {fileID: 7993677657141579380, guid: 12336417dd27cb745bf84a18461e5550, type: 3}
-      propertyPath: m_LocalScale.x
-      value: 1.1787499
-      objectReference: {fileID: 0}
-    - target: {fileID: 7993677657141579380, guid: 12336417dd27cb745bf84a18461e5550, type: 3}
       propertyPath: m_LocalPosition.x
       value: 4.942892
       objectReference: {fileID: 0}
@@ -876,7 +872,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7993677657141579380, guid: 12336417dd27cb745bf84a18461e5550, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 601.79
+      value: 599.9798
       objectReference: {fileID: 0}
     - target: {fileID: 7993677657141579380, guid: 12336417dd27cb745bf84a18461e5550, type: 3}
       propertyPath: m_LocalRotation.w
