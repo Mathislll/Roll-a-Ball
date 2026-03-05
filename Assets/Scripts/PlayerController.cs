@@ -38,7 +38,7 @@ public class PlayerController : MonoBehaviour
 
     [Header("Health System")]
     public int maxLives = 3;
-    private int currentLives;
+    public int currentLives;
     public float respawnDelay = 1f;
     public float invincibilityDuration = 1.5f;
     private bool isDead;
@@ -57,6 +57,12 @@ public class PlayerController : MonoBehaviour
     private PlayerScore playerScore;
     private bool isKnockedBack;
     public MMF_Player damageFeedback;
+    public event System.Action<int> OnHealthChanged;
+
+    void Awake()
+    {
+        currentLives = maxLives;
+    }
 
     void Start()
     {
@@ -65,7 +71,6 @@ public class PlayerController : MonoBehaviour
         rb.linearDamping = 0f;
         playerScore = GetComponent<PlayerScore>();
 
-        currentLives = maxLives;
         currentCheckpointPosition = transform.position;
 
         if (audioSource == null)
@@ -179,6 +184,7 @@ public class PlayerController : MonoBehaviour
         if (isDead || isInvincible) return;
 
         currentLives = currentLives - damageAmount;
+        OnHealthChanged?.Invoke(currentLives); 
 
         if (currentLives > 0)
         {
@@ -261,6 +267,7 @@ public class PlayerController : MonoBehaviour
         }
 
         currentLives = maxLives;
+        OnHealthChanged?.Invoke(currentLives);
 
         PlaySound(respawnSound);
 
