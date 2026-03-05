@@ -1,3 +1,4 @@
+using MoreMountains.Feedbacks;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -8,6 +9,9 @@ public class PlayerController : MonoBehaviour
     private Animator anim;
     private float movementX;
     private float movementY;
+
+    [Header("Visuals")]
+    public GameObject playerModel;
 
     [Header("Ground control")]
     public float groundAcceleration = 60f;
@@ -32,8 +36,27 @@ public class PlayerController : MonoBehaviour
     public LayerMask groundMask;
     private bool isGrounded;
 
+    [Header("Health System")]
+    public int maxLives = 3;
+    private int currentLives;
+    public float respawnDelay = 1f;
+    public float invincibilityDuration = 1.5f;
+    private bool isDead;
+    private bool isInvincible;
+    private Vector3 currentCheckpointPosition;
+
+    [Header("Audio System")]
+    public AudioSource audioSource;
+    public AudioClip[] loseLifeSounds;
+    public AudioClip deathSound;
+    public AudioClip respawnSound;
+
+    [Header("Death Effects")]
+    public GameObject[] deathEffectObjects;
+
     private PlayerScore playerScore;
     private bool isKnockedBack;
+    public MMF_Player damageFeedback;
 
     void Start()
     {
@@ -41,10 +64,20 @@ public class PlayerController : MonoBehaviour
         anim = GetComponent<Animator>();
         rb.linearDamping = 0f;
         playerScore = GetComponent<PlayerScore>();
+
+        currentLives = maxLives;
+        currentCheckpointPosition = transform.position;
+
+        if (audioSource == null)
+        {
+            audioSource = GetComponent<AudioSource>();
+        }
     }
 
     void OnMove(InputValue movementValue)
     {
+        if (isDead) return;
+
         Vector2 movementVector = movementValue.Get<Vector2>();
         movementX = movementVector.x;
         movementY = movementVector.y;
@@ -52,9 +85,11 @@ public class PlayerController : MonoBehaviour
 
     void OnJump(InputValue value)
     {
+        if (isDead) return;
+
         if (isGrounded)
         {
-            anim.SetTrigger("Jump");
+            if (anim != null) anim.SetTrigger("Jump");
             StartCoroutine(JumpRoutine());
         }
     }
@@ -69,12 +104,18 @@ public class PlayerController : MonoBehaviour
     void Update()
     {
         isGrounded = Physics.CheckSphere(groundCheck.position, groundDistance, groundMask);
-        anim.SetBool("IsGrounded", isGrounded);
-        anim.SetFloat("VerticalVelocity", rb.linearVelocity.y);
+
+        if (anim != null)
+        {
+            anim.SetBool("IsGrounded", isGrounded);
+            anim.SetFloat("VerticalVelocity", rb.linearVelocity.y);
+        }
     }
 
     private void FixedUpdate()
     {
+        if (isDead) return;
+
         if (isKnockedBack)
         {
             if (!isGrounded)
@@ -112,12 +153,11 @@ public class PlayerController : MonoBehaviour
 
     public void ApplyKnockback(Vector3 direction, float force)
     {
+        if (isDead) return;
+
         isKnockedBack = true;
-
         rb.linearVelocity = Vector3.zero;
-
         rb.angularVelocity = Vector3.zero;
-
         rb.AddForce(direction * force, ForceMode.Impulse);
         StartCoroutine(KnockbackRecovery());
     }
@@ -134,13 +174,123 @@ public class PlayerController : MonoBehaviour
         isKnockedBack = false;
     }
 
+    public void TakeDamage(int damageAmount)
+    {
+        if (isDead || isInvincible) return;
+
+        currentLives = currentLives - damageAmount;
+
+        if (currentLives > 0)
+        {
+            if (loseLifeSounds.Length > 0)
+            {
+                int randomIndex = Random.Range(0, loseLifeSounds.Length);
+                PlaySound(loseLifeSounds[randomIndex]);
+                damageFeedback?.PlayFeedbacks();
+            }
+            StartCoroutine(InvincibilityRoutine());
+        }
+        else
+        {
+            Die();
+        }
+    }
+
+    private IEnumerator InvincibilityRoutine()
+    {
+        isInvincible = true;
+        yield return new WaitForSeconds(invincibilityDuration);
+        isInvincible = false;
+    }
+
+    public void Die()
+    {
+        isDead = true;
+        isKnockedBack = false;
+        movementX = 0f;
+        movementY = 0f;
+
+        rb.isKinematic = true;
+        rb.linearVelocity = Vector3.zero;
+        rb.angularVelocity = Vector3.zero;
+
+        if (playerModel != null)
+        {
+            playerModel.SetActive(false);
+        }
+
+        PlaySound(deathSound);
+
+        if (deathEffectObjects != null && deathEffectObjects.Length > 0)
+        {
+            int randomEffectIndex = Random.Range(0, deathEffectObjects.Length);
+            GameObject selectedEffect = deathEffectObjects[randomEffectIndex];
+
+            if (selectedEffect != null)
+            {
+                ParticleSystem ps = selectedEffect.GetComponent<ParticleSystem>();
+                if (ps != null)
+                {
+                    ps.Play();
+                }
+
+                AudioSource audio = selectedEffect.GetComponent<AudioSource>();
+                if (audio != null)
+                {
+                    audio.Play();
+                }
+            }
+        }
+
+        StartCoroutine(RespawnRoutine());
+    }
+
+    private IEnumerator RespawnRoutine()
+    {
+        yield return new WaitForSeconds(respawnDelay);
+
+        transform.position = currentCheckpointPosition;
+
+        rb.isKinematic = false;
+        rb.linearVelocity = Vector3.zero;
+        rb.angularVelocity = Vector3.zero;
+
+        if (playerModel != null)
+        {
+            playerModel.SetActive(true);
+        }
+
+        currentLives = maxLives;
+
+        PlaySound(respawnSound);
+
+        isDead = false;
+        StartCoroutine(InvincibilityRoutine());
+    }
+
+    public void SetCheckpoint(Vector3 newPosition)
+    {
+        currentCheckpointPosition = newPosition;
+    }
+
+    private void PlaySound(AudioClip clip)
+    {
+        if (audioSource != null && clip != null)
+        {
+            audioSource.PlayOneShot(clip);
+        }
+    }
+
     void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.CompareTag("PickUp"))
         {
             other.gameObject.SetActive(false);
-            playerScore.count++;
-            playerScore.SetCountText();
+            if (playerScore != null)
+            {
+                playerScore.count++;
+                playerScore.SetCountText();
+            }
         }
     }
 }
