@@ -54,6 +54,11 @@ public class PlayerController : MonoBehaviour
     [Header("Death Effects")]
     public GameObject[] deathEffectObjects;
 
+    [Header("Hat Invincibility")]
+    public float hatInvincibilityDuration = 10f;
+    public MMF_Player hatInvincibilityFeedback;
+    public bool isHatInvincible;
+
     private PlayerScore playerScore;
     private bool isKnockedBack;
     public MMF_Player damageFeedback;
@@ -181,10 +186,10 @@ public class PlayerController : MonoBehaviour
 
     public void TakeDamage(int damageAmount)
     {
-        if (isDead || isInvincible) return;
+        if (isDead || isInvincible || isHatInvincible) return;
 
         currentLives = currentLives - damageAmount;
-        OnHealthChanged?.Invoke(currentLives); 
+        OnHealthChanged?.Invoke(currentLives);
 
         if (currentLives > 0)
         {
@@ -200,6 +205,25 @@ public class PlayerController : MonoBehaviour
         {
             Die();
         }
+    }
+
+    public void ActivateHatInvincibility()
+    {
+        StartCoroutine(HatInvincibilityRoutine());
+    }
+
+    private IEnumerator HatInvincibilityRoutine()
+    {
+        isHatInvincible = true;
+
+        if (hatInvincibilityFeedback != null)
+        {
+            hatInvincibilityFeedback.PlayFeedbacks();
+        }
+
+        yield return new WaitForSeconds(hatInvincibilityDuration);
+
+        isHatInvincible = false;
     }
 
     private IEnumerator InvincibilityRoutine()

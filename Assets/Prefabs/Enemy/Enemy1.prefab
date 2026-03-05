@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 163983839386895959}
   - component: {fileID: 2038799746969161163}
   - component: {fileID: 7495068999112018914}
+  - component: {fileID: 5246521636662917600}
   m_Layer: 0
   m_Name: Enemy1
   m_TagString: Untagged
@@ -103,10 +104,12 @@ MonoBehaviour:
   stompKnockbackForce: 30
   stompKnockbackAngle: 90
   stompSound: {fileID: 8300000, guid: 4e5e5608e5ca9a84abbb993fa9648458, type: 3}
+  launchForce: 7
+  launchSound: {fileID: 8300000, guid: 1903a3f0ff32a4a42a40642d5b7980c0, type: 3}
   enemyModel: {fileID: 6217309882929373187}
   deathParticles: {fileID: 1700526351380527867}
   audioSource: {fileID: 1700526351366813349}
-  deathSound: {fileID: 8300000, guid: e0f8074327731a947b02c18d90cc7085, type: 3}
+  deathSound: {fileID: 8300000, guid: d5747eb32b35fad4c8160e456608db83, type: 3}
   destroyDelay: 1
   squashDuration: 0.2
   squashCurveY:
@@ -183,7 +186,33 @@ MonoBehaviour:
   detectionRange: 13
   chaseExitDelay: 3
   stateText: {fileID: 4088863708083787583}
-  deathFeedback: {fileID: 5783391362739392111}
+--- !u!54 &5246521636662917600
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2275084054396386533}
+  serializedVersion: 5
+  m_Mass: 1
+  m_LinearDamping: 0
+  m_AngularDamping: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 1
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
 --- !u!1 &3202012211360309020
 GameObject:
   m_ObjectHideFlags: 0

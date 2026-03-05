@@ -3,7 +3,6 @@ using UnityEngine.AI;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
-using MoreMountains.Feedbacks;
 
 public class EnemyAI : MonoBehaviour
 {
@@ -24,6 +23,12 @@ public class EnemyAI : MonoBehaviour
     [Range(0f, 90f)]
     public float stompKnockbackAngle = 80f;
     public AudioClip stompSound;
+
+    [Header("Launch Settings")]
+    public float launchForce = 15f;
+    public AudioClip launchSound;
+    private Rigidbody rb;
+    private bool isLaunched;
 
     [Header("Health Settings")]
     public Transform enemyModel;
@@ -58,11 +63,11 @@ public class EnemyAI : MonoBehaviour
     private bool isAttacking;
     private bool isWaiting;
     private Camera mainCamera;
-    public MMF_Player deathFeedback;
 
     void Start()
     {
         agent = GetComponent<NavMeshAgent>();
+        rb = GetComponent<Rigidbody>();
         anim = GetComponentInChildren<Animator>();
         mainCamera = Camera.main;
 
@@ -85,7 +90,7 @@ public class EnemyAI : MonoBehaviour
             stateText.text = currentState.ToString();
         }
 
-        if (currentState == EnemyState.Dead) return;
+        if (currentState == EnemyState.Dead || isLaunched) return;
 
         if (player == null || isAttacking)
         {
@@ -149,13 +154,27 @@ public class EnemyAI : MonoBehaviour
     {
         if (currentState == EnemyState.Dead) return;
 
+        if (isLaunched)
+        {
+            if (!collision.gameObject.CompareTag("Player"))
+            {
+                Die();
+            }
+            return;
+        }
+
         if (collision.gameObject.CompareTag("Player"))
         {
             PlayerController playerScript = collision.gameObject.GetComponent<PlayerController>();
             if (playerScript == null) return;
 
-            bool isHeadStomp = false;
+            if (playerScript.isHatInvincible)
+            {
+                LaunchEnemy();
+                return;
+            }
 
+            bool isHeadStomp = false;
             foreach (ContactPoint contact in collision.contacts)
             {
                 if (contact.normal.y < -0.5f)
@@ -172,14 +191,12 @@ public class EnemyAI : MonoBehaviour
             {
                 float angleInRadians = stompKnockbackAngle * Mathf.Deg2Rad;
                 Vector3 finalDirection = flatDirection * Mathf.Cos(angleInRadians) + Vector3.up * Mathf.Sin(angleInRadians);
-
                 playerScript.ApplyKnockback(finalDirection.normalized, stompKnockbackForce);
 
                 if (audioSource != null && stompSound != null)
                 {
                     audioSource.PlayOneShot(stompSound);
                 }
-
                 Die();
             }
             else if (!isAttacking)
@@ -189,9 +206,41 @@ public class EnemyAI : MonoBehaviour
 
                 playerScript.TakeDamage(damageAmount);
                 playerScript.ApplyKnockback(finalDirection.normalized, damageKnockbackForce);
-
                 StartCoroutine(AttackRoutine());
             }
+        }
+    }
+
+    void LaunchEnemy()
+    {
+        isLaunched = true;
+
+        if (agent != null)
+        {
+            agent.enabled = false;
+        }
+
+        if (rb != null)
+        {
+            rb.isKinematic = false;
+
+            if (audioSource != null && launchSound != null)
+            {
+                audioSource.PlayOneShot(launchSound);
+            }
+
+            Vector3 pushDirection = transform.position - player.position;
+            pushDirection.y = 0f;
+            pushDirection = pushDirection.normalized;
+
+            pushDirection.y = Random.Range(0.8f, 1.2f);
+            pushDirection.x += Random.Range(-0.4f, 0.4f);
+            pushDirection.z += Random.Range(-0.4f, 0.4f);
+
+            Vector3 finalDirection = pushDirection.normalized;
+
+            rb.AddForce(finalDirection * launchForce, ForceMode.Impulse);
+            rb.AddTorque(new Vector3(Random.Range(-10f, 10f), Random.Range(-10f, 10f), Random.Range(-10f, 10f)), ForceMode.Impulse);
         }
     }
 
@@ -200,8 +249,16 @@ public class EnemyAI : MonoBehaviour
         if (currentState == EnemyState.Dead) return;
 
         currentState = EnemyState.Dead;
-        agent.isStopped = true;
-        agent.enabled = false;
+
+        if (agent != null && agent.enabled && agent.isOnNavMesh)
+        {
+            agent.isStopped = true;
+        }
+
+        if (agent != null)
+        {
+            agent.enabled = false;
+        }
 
         Collider col = GetComponent<Collider>();
         if (col != null) col.enabled = false;
@@ -212,7 +269,7 @@ public class EnemyAI : MonoBehaviour
         {
             audioSource.PlayOneShot(deathSound);
         }
-        deathFeedback?.PlayFeedbacks();
+
         StartCoroutine(SquashRoutine());
     }
 
@@ -226,18 +283,14 @@ public class EnemyAI : MonoBehaviour
             while (time < squashDuration)
             {
                 float normalizedTime = time / squashDuration;
-
                 float scaleY = squashCurveY.Evaluate(normalizedTime);
                 float scaleXZ = squashCurveXZ.Evaluate(normalizedTime);
-
                 enemyModel.localScale = new Vector3(originalScale.x * scaleXZ, originalScale.y * scaleY, originalScale.z * scaleXZ);
-
                 time += Time.deltaTime;
                 yield return null;
             }
 
             enemyModel.localScale = new Vector3(originalScale.x * squashCurveXZ.Evaluate(1f), originalScale.y * squashCurveY.Evaluate(1f), originalScale.z * squashCurveXZ.Evaluate(1f));
-
             enemyModel.gameObject.SetActive(false);
         }
 
@@ -247,12 +300,11 @@ public class EnemyAI : MonoBehaviour
 
     void SetNextPatrolPoint()
     {
-        if (patrolPoints.Count == 0 || isAttacking || currentState == EnemyState.Dead) return;
+        if (patrolPoints.Count == 0 || isAttacking || currentState == EnemyState.Dead || isLaunched) return;
 
         agent.speed = patrolSpeed;
         int randomIndex = Random.Range(0, patrolPoints.Count);
         Vector3 centerPoint = patrolPoints[randomIndex].position;
-
         Vector3 randomDirection = Random.insideUnitSphere * patrolRandomRadius;
         randomDirection += centerPoint;
 
@@ -271,17 +323,16 @@ public class EnemyAI : MonoBehaviour
     {
         isWaiting = true;
         currentState = EnemyState.Idle;
-        agent.isStopped = true;
+        if (agent.enabled && agent.isOnNavMesh) agent.isStopped = true;
 
         yield return new WaitForSeconds(Random.Range(1f, 3f));
 
-        if (currentState != EnemyState.Chase && currentState != EnemyState.Dead)
+        if (currentState != EnemyState.Chase && currentState != EnemyState.Dead && !isLaunched)
         {
             currentState = EnemyState.Patrol;
-            agent.isStopped = false;
+            if (agent.enabled && agent.isOnNavMesh) agent.isStopped = false;
             SetNextPatrolPoint();
         }
-
         isWaiting = false;
     }
 
@@ -289,7 +340,7 @@ public class EnemyAI : MonoBehaviour
     {
         isAttacking = true;
         currentState = EnemyState.Attack;
-        agent.isStopped = true;
+        if (agent.enabled && agent.isOnNavMesh) agent.isStopped = true;
 
         if (anim != null)
         {
@@ -298,9 +349,9 @@ public class EnemyAI : MonoBehaviour
 
         yield return new WaitForSeconds(attackPauseDuration);
 
-        if (currentState != EnemyState.Dead)
+        if (currentState != EnemyState.Dead && !isLaunched)
         {
-            agent.isStopped = false;
+            if (agent.enabled && agent.isOnNavMesh) agent.isStopped = false;
             isAttacking = false;
             currentState = EnemyState.Chase;
         }
