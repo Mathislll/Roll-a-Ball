@@ -235,14 +235,17 @@ public class PlayerController : MonoBehaviour
 
     public void Die()
     {
+        if (isDead) return;
+
         isDead = true;
         isKnockedBack = false;
+
         movementX = 0f;
         movementY = 0f;
-
         rb.isKinematic = true;
         rb.linearVelocity = Vector3.zero;
         rb.angularVelocity = Vector3.zero;
+        rb.Sleep();
 
         if (playerModel != null)
         {
@@ -259,16 +262,10 @@ public class PlayerController : MonoBehaviour
             if (selectedEffect != null)
             {
                 ParticleSystem ps = selectedEffect.GetComponent<ParticleSystem>();
-                if (ps != null)
-                {
-                    ps.Play();
-                }
+                if (ps != null) ps.Play();
 
                 AudioSource audio = selectedEffect.GetComponent<AudioSource>();
-                if (audio != null)
-                {
-                    audio.Play();
-                }
+                if (audio != null) audio.Play();
             }
         }
 
@@ -280,15 +277,23 @@ public class PlayerController : MonoBehaviour
         yield return new WaitForSeconds(respawnDelay);
 
         transform.position = currentCheckpointPosition;
-
-        rb.isKinematic = false;
+        rb.isKinematic = true;
         rb.linearVelocity = Vector3.zero;
         rb.angularVelocity = Vector3.zero;
+        movementX = 0f;
+        movementY = 0f;
 
         if (playerModel != null)
         {
             playerModel.SetActive(true);
         }
+
+        yield return new WaitForSeconds(1f);
+
+        rb.isKinematic = false;
+        rb.linearVelocity = Vector3.zero;
+        rb.angularVelocity = Vector3.zero;
+        rb.WakeUp();
 
         currentLives = maxLives;
         OnHealthChanged?.Invoke(currentLives);

@@ -17,6 +17,9 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Level_02.unity
     guid: 00aeab00af2068042a358eaf81b0cf6a
+  - enabled: 1
+    path: Assets/Scenes/Level_Hardcore.unity
+    guid: a606e546ae02a5e4cb49e16f1c25186f
   - enabled: 0
     path: Assets/ithappy/Platformer_2_Obstacles/Scenes/Demonstration.unity
     guid: e78b4201a1f9f034a9095a10cc9edda5
