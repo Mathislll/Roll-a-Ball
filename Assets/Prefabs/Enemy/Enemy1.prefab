@@ -104,7 +104,7 @@ MonoBehaviour:
   stompKnockbackForce: 30
   stompKnockbackAngle: 90
   stompSound: {fileID: 8300000, guid: 4e5e5608e5ca9a84abbb993fa9648458, type: 3}
-  launchForce: 7
+  launchForce: 15
   launchSound: {fileID: 8300000, guid: 1903a3f0ff32a4a42a40642d5b7980c0, type: 3}
   enemyModel: {fileID: 6217309882929373187}
   deathParticles: {fileID: 1700526351380527867}
